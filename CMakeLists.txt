@@ -25,3 +25,5 @@ if(MSVC)
 else()
     install(TARGETS dmx_512_analyzer LIBRARY DESTINATION ".")
 endif()
+
+set_post_build_destination(dmx_512_analyzer)
