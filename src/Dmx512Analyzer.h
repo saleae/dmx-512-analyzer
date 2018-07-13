@@ -7,7 +7,7 @@
 #include "Dmx512SimulationDataGenerator.h"
 
 class Dmx512AnalyzerSettings;
-class ANALYZER_EXPORT Dmx512Analyzer : public Analyzer2
+class Dmx512Analyzer : public Analyzer2
 {
 public:
 	Dmx512Analyzer();
