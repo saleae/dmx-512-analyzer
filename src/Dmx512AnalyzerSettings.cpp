@@ -12,8 +12,9 @@ Dmx512AnalyzerSettings::Dmx512AnalyzerSettings()
 	AddInterface( mInputChannelInterface.get() );
 	
 	mOldVersionInterface.reset( new AnalyzerSettingInterfaceBool() );
-	mOldVersionInterface->SetTitleAndTooltip( "Accept DMX-1986 4us MAB",
+	mOldVersionInterface->SetTitleAndTooltip( "",
 											  "Accept 4us MAB as per USITT DMX-512 (1986)" ); 
+	mOldVersionInterface->SetCheckBoxText( "Accept DMX-1986 4us MAB" );
 	AddInterface( mOldVersionInterface.get() );
 
 	AddExportOption( 0, "Export as text/csv file" );
