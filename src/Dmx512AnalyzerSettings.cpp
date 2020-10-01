@@ -1,28 +1,24 @@
 #include "Dmx512AnalyzerSettings.h"
 #include <AnalyzerHelpers.h>
 
-Dmx512AnalyzerSettings::Dmx512AnalyzerSettings()
-:	mInputChannel( UNDEFINED_CHANNEL ),
-	mBitRate( 250000 ),
-	mMinMAB( .000004 )
+Dmx512AnalyzerSettings::Dmx512AnalyzerSettings() : mInputChannel( UNDEFINED_CHANNEL ), mBitRate( 250000 ), mMinMAB( .000004 )
 {
-	mInputChannelInterface.reset( new AnalyzerSettingInterfaceChannel() );
-	mInputChannelInterface->SetTitleAndTooltip( "Serial", "Standard DMX-512" );
-	mInputChannelInterface->SetChannel( mInputChannel );
-	AddInterface( mInputChannelInterface.get() );
-	
-	mOldVersionInterface.reset( new AnalyzerSettingInterfaceBool() );
-	mOldVersionInterface->SetTitleAndTooltip( "",
-											  "Accept 4us MAB as per USITT DMX-512 (1986)" ); 
-	mOldVersionInterface->SetCheckBoxText( "Accept DMX-1986 4us MAB" );
-	AddInterface( mOldVersionInterface.get() );
+    mInputChannelInterface.reset( new AnalyzerSettingInterfaceChannel() );
+    mInputChannelInterface->SetTitleAndTooltip( "Serial", "Standard DMX-512" );
+    mInputChannelInterface->SetChannel( mInputChannel );
+    AddInterface( mInputChannelInterface.get() );
 
-	AddExportOption( 0, "Export as text/csv file" );
-	AddExportExtension( 0, "text", "txt" );
-	AddExportExtension( 0, "csv", "csv" );
+    mOldVersionInterface.reset( new AnalyzerSettingInterfaceBool() );
+    mOldVersionInterface->SetTitleAndTooltip( "", "Accept 4us MAB as per USITT DMX-512 (1986)" );
+    mOldVersionInterface->SetCheckBoxText( "Accept DMX-1986 4us MAB" );
+    AddInterface( mOldVersionInterface.get() );
 
-	ClearChannels();
-	AddChannel( mInputChannel, "Serial", false );
+    AddExportOption( 0, "Export as text/csv file" );
+    AddExportExtension( 0, "text", "txt" );
+    AddExportExtension( 0, "csv", "csv" );
+
+    ClearChannels();
+    AddChannel( mInputChannel, "Serial", false );
 }
 
 Dmx512AnalyzerSettings::~Dmx512AnalyzerSettings()
@@ -31,42 +27,42 @@ Dmx512AnalyzerSettings::~Dmx512AnalyzerSettings()
 
 bool Dmx512AnalyzerSettings::SetSettingsFromInterfaces()
 {
-	mInputChannel = mInputChannelInterface->GetChannel();
+    mInputChannel = mInputChannelInterface->GetChannel();
 
-	ClearChannels();
-	AddChannel( mInputChannel, "DMX-512", true );
+    ClearChannels();
+    AddChannel( mInputChannel, "DMX-512", true );
 
-	mMinMAB = mOldVersionInterface->GetValue() ? .000004 : .000008;
-	
-	return true;
+    mMinMAB = mOldVersionInterface->GetValue() ? .000004 : .000008;
+
+    return true;
 }
 
 void Dmx512AnalyzerSettings::UpdateInterfacesFromSettings()
 {
-	mInputChannelInterface->SetChannel( mInputChannel );
-	mOldVersionInterface->SetValue( mMinMAB < .000008 );
+    mInputChannelInterface->SetChannel( mInputChannel );
+    mOldVersionInterface->SetValue( mMinMAB < .000008 );
 }
 
 void Dmx512AnalyzerSettings::LoadSettings( const char* settings )
 {
-	SimpleArchive text_archive;
-	text_archive.SetString( settings );
+    SimpleArchive text_archive;
+    text_archive.SetString( settings );
 
-	text_archive >> mInputChannel;
-	text_archive >> mMinMAB;
+    text_archive >> mInputChannel;
+    text_archive >> mMinMAB;
 
-	ClearChannels();
-	AddChannel( mInputChannel, "DMX-512", true );
+    ClearChannels();
+    AddChannel( mInputChannel, "DMX-512", true );
 
-	UpdateInterfacesFromSettings();
+    UpdateInterfacesFromSettings();
 }
 
 const char* Dmx512AnalyzerSettings::SaveSettings()
 {
-	SimpleArchive text_archive;
-	
-	text_archive << mInputChannel;
-	text_archive << mMinMAB;
+    SimpleArchive text_archive;
 
-	return SetReturnString( text_archive.GetString() );
+    text_archive << mInputChannel;
+    text_archive << mMinMAB;
+
+    return SetReturnString( text_archive.GetString() );
 }
